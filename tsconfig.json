@@ -1,0 +1,44 @@
+{
+	"compilerOptions": {
+		// Environment setup & latest features
+		"lib": [
+			"ESNext",
+			"DOM"
+		],
+		"target": "ESNext",
+		"module": "Preserve",
+		"moduleDetection": "force",
+		"rootDir": "./src/",
+		"declaration": true,
+		"composite": true,
+		// Bundler mode
+		"moduleResolution": "bundler",
+		"allowImportingTsExtensions": true,
+		"verbatimModuleSyntax": true,
+		"emitDeclarationOnly": true,
+		"isolatedDeclarations": true,
+		// Best practices
+		"strict": true,
+		"skipLibCheck": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUncheckedIndexedAccess": true,
+		"noImplicitOverride": true,
+		// Some stricter flags (disabled by default)
+		"noUnusedLocals": false,
+		"noUnusedParameters": false,
+		"noPropertyAccessFromIndexSignature": false,
+		"noImplicitAny": true,
+		"noImplicitThis": true,
+		"strictNullChecks": true,
+		"strictFunctionTypes": true,
+		"paths": {
+			"/*": [
+				"./*"
+			]
+		}
+	},
+	"exclude": [
+		"lol.ts",
+		"tsdown.config.ts"
+	]
+}

@@ -1,0 +1,34 @@
+{
+	"name": "@wq2/waybackhq-types",
+	"version": "0.0.0",
+	"description": "Typings for WaybackHQ",
+	"license": "AGPL-3.0-only",
+	"files": [
+		"src",
+		"vendor",
+		"LICENSE.md",
+		"ReadME.md"
+	],
+	"type": "module",
+	"publishConfig": {
+		"access": "public"
+	},
+	"scripts": {
+		"build": "tsdown",
+		"dev": "tsdown -w",
+		"lint": "oxlint src",
+		"lint:fix": "oxlint src --fix",
+		"fmt": "oxfmt src",
+		"prepublishOnly": "bun run build"
+	},
+	"dependencies": {
+		"@types/three": "0.160.0"
+	},
+	"devDependencies": {
+		"oxfmt": "~0.63.0",
+		"oxlint": "~1.78.0",
+		"typescript": "^7.0.2"
+	},
+	"packageManager": "bun@1.4.0",
+	"readme": "ReadME.md"
+}
