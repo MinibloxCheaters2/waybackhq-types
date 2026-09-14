@@ -3,6 +3,10 @@
 	"version": "0.0.0",
 	"description": "Typings for WaybackHQ",
 	"license": "AGPL-3.0-only",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/MinibloxCheaters2/waybackhq-types.git"
+	},
 	"files": [
 		"src",
 		"vendor",
