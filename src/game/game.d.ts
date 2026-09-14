@@ -41,7 +41,7 @@ export class Game {
 	partialTicks: number;
 	running: boolean;
 	paused: boolean;
-	currentScreen: "inventory" | "chat" | null;
+	currentScreen: string | null;
 	currentScreenCloser: (() => void) | null;
 	matchState: string;
 	countdown: number;
@@ -125,7 +125,7 @@ export class Game {
 	equippedSlot: number;
 	itemToRender: import("../item/items.js").ItemStack | null;
 	pendingNetAttacks: number;
-	pendingNetAttackTarget: string | number | undefined;
+	pendingNetAttackTarget: string | number | null | undefined;
 	pendingNetUseDown: boolean;
 	pendingNetUseUp: boolean;
 	pendingNetDrop: number;

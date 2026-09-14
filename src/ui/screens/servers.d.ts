@@ -1,6 +1,6 @@
 import { Session } from "../../net/session.js";
 
-interface ServerInfo {
+export interface ServerInfo {
 	id: string | number;
 	name: string;
 	label: string;
@@ -8,7 +8,7 @@ interface ServerInfo {
 	kind: string;
 	players: number;
 	maxPlayers: number;
-	ping: number;
+	ping: number | undefined;
 	private: boolean;
 	duels: number;
 	playerNames: string[];
@@ -24,7 +24,7 @@ export namespace ServerScreen {
 	function newSession(): Session;
 	function createServer(): Promise<void>;
 	function drawPrivateLabel(right: number, y: number): void;
-	function joinServer(server: ServerInfo, shareToken?: string): Promise<void>;
+	function joinServer(server: ServerInfo | undefined, shareToken?: string): Promise<void>;
 	function joinShareLink(): Promise<void>;
 	function teardownSession(): void;
 }

@@ -1,4 +1,5 @@
 import { AABB, Vec3 } from "../core/aabb.js";
+import { JavaRandom } from "../core/random.js";
 /**
  * Port of net.minecraft.entity.Entity for the subset of behaviour a duel needs.
  *
@@ -10,7 +11,7 @@ import { AABB, Vec3 } from "../core/aabb.js";
 export class Entity {
 	constructor(world: World);
 	world: World;
-	rand: import("../core/random.js").JavaRandom;
+	rand: JavaRandom;
 	entityId: number;
 	isDead: boolean;
 	posX: number;

@@ -1,4 +1,5 @@
-import { PACKET, CONNECTION_EVENTS } from "./protocol.js";
+import { PACKET } from "./protocol.js";
+import { CONNECTION_EVENTS } from "../plugin/events.js";
 
 export function apiUrl(path: string): string;
 export class Connection {

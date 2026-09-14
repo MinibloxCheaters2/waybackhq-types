@@ -1,3 +1,5 @@
+import * as THREE from "three";
+
 /** Creates one glint overlay pass sharing the geometry and glint material. */
 export function makeGlintMesh(
 	geometry: THREE.BufferGeometry,
@@ -21,4 +23,3 @@ export function drawItemGlint(
 ): void;
 /** Whether a stack renders the enchantment glint in the GUI. */
 export function shouldGlint(stack: { hasEffect(): boolean; potionType?: unknown } | null): boolean;
-import * as THREE from "three";

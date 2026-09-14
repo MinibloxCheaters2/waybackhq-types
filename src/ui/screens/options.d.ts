@@ -1,6 +1,6 @@
 export namespace OptionsScreen {
 	function optionLabel(key: string, label: string): string;
-	function cycleOption(def: [string, string, [number, number, number] | undefined]): void;
+	function cycleOption(def: [string, string, [number, number, number]?]): void;
 	function drawOptions(): void;
 	function ensureOptionSlider(
 		key: string,

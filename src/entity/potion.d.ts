@@ -1,6 +1,5 @@
 import { Entity, DamageSourceType } from "./entity.js";
 import { EntityLivingBase } from "./entityliving.js";
-import { KnockbackConfig } from "../core/knockback.js";
 export interface PotionAttributeModifier {
 	attribute: string;
 	amount: number;

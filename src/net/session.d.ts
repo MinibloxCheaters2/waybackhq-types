@@ -1,9 +1,10 @@
 import { Connection } from "./connection.js";
-import { EventBus } from "../plugin/eventbus.js";
-import { Game } from "../game/game.js";
+import { EntityPotion, EntityEnderPearl } from "../entity/throwable.js";
+import { PotionEffect } from "../entity/potion.js";
 import { ItemStack } from "../item/items.js";
 import { EntityItem } from "../entity/item.js";
-import { EntityEnderPearl, EntityPotion } from "../entity/throwable.js";
+import { Game } from "../game/game.js";
+import { EventBus } from "../plugin/eventbus.js";
 
 export interface ServerInfo {
 	id: string | number;
@@ -23,14 +24,18 @@ export interface TeleportTarget {
 	yaw: number;
 	pitch: number;
 	onGround: boolean;
+	motionX: number;
+	motionY: number;
+	motionZ: number;
+	fallDistance: number;
 }
 
 export interface MatchOptions {
-	role: string;
-	arenaId: unknown;
+	role: "client" | "host";
+	arenaId: string | undefined;
 	autoClicker: boolean;
 	localName: string;
-	players: unknown[];
+	players: Array<{ id: string | number; name: string; role?: string; spec?: boolean }>;
 	localEntityId: number;
 	localRole: string;
 	spawn: {
@@ -42,19 +47,19 @@ export interface MatchOptions {
 	} | null;
 	matchState: string | undefined;
 	countdown: number | undefined;
-	serverData: unknown;
+	serverData: Record<string, unknown> | null;
 }
 
-export interface EntitySnapshot {
+export interface DecodedPlayerState {
 	id: number;
 	x: number;
 	y: number;
 	z: number;
-	yaw: number;
-	pitch: number;
 	mx: number;
 	my: number;
 	mz: number;
+	yaw: number;
+	pitch: number;
 	health: number;
 	food: number;
 	hurtTime: number;
@@ -85,6 +90,10 @@ export interface DecodedTeleport {
 	pitch: number;
 	id: number | undefined;
 	onGround: boolean;
+	motionX: number;
+	motionY: number;
+	motionZ: number;
+	fallDistance: number;
 }
 
 export interface DecodedEffect {
@@ -169,7 +178,7 @@ export class Session {
 		pitch: number;
 	}): void;
 	applySnapshot(packet: unknown[]): void;
-	applyLocalState(state: EntitySnapshot): void;
+	applyLocalState(state: DecodedPlayerState): void;
 	applyInventory(packet: unknown[]): void;
 	applyEvent(packet: unknown[]): void;
 	syncProjectiles(list: unknown[]): void;

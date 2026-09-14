@@ -6,9 +6,11 @@ import { Vec3 } from "../core/aabb.js";
 import { PlayerModel } from "./modelplayer.js";
 import type { ClientPlayer } from "./clientplayer.js";
 import type { EntityPlayer } from "../entity/player.js";
+import type { World } from "../world/world.js";
+import type { Entity } from "../entity/entity.js";
 
 declare class PlayerRenderer {
-	player: unknown;
+	player: EntityPlayer;
 	model: PlayerModel;
 	group: THREE.Group;
 	fire: THREE.Group;
@@ -64,7 +66,7 @@ export class WorldRenderer {
 	_rayEnd: Vec3;
 	_rayEye: Vec3;
 	selectionBox: THREE.LineSegments;
-	world: unknown;
+	world: World | null;
 	playerViewY: number;
 	playerViewX: number;
 	localSkinTexture: THREE.Texture | undefined;
@@ -96,7 +98,7 @@ export class WorldRenderer {
 	 */
 	updateLightmap(): void;
 	/** Rebuilds all static geometry for a new arena. */
-	setWorld(world: unknown, timeMinutes?: number): void;
+	setWorld(world: World, timeMinutes: number): void;
 	setClearGlass(enabled: boolean): void;
 	/**
 	 * Builds the sky from the active pack: a box skybox (side gradient, roof,
@@ -104,13 +106,13 @@ export class WorldRenderer {
 	 * the 1.7.10 renderSky does with its box sky and celestial rotation.
 	 * Async because pack textures load lazily.
 	 */
-	buildSky(world: unknown, timeMinutes: number): Promise<void>;
+	buildSky(world: World, timeMinutes: number): Promise<void>;
 	/**
 	 * Port of EntityRenderer.getFOVModifier plus updateFovModifierHand: the
 	 * hand modifier lerps 50% per tick toward the movement-speed ratio.
 	 */
-	updateFovModifier(player: unknown): void;
-	getFov(player: unknown, partialTicks: number): number;
+	updateFovModifier(player: EntityPlayer): void;
+	getFov(player: ClientPlayer, partialTicks: number): number;
 	/**
 	 * Port of hurtCameraEffect followed by setupViewBobbing, in that order.
 	 *
@@ -124,13 +126,13 @@ export class WorldRenderer {
 	 */
 	applyViewEffects(
 		view: THREE.Matrix4,
-		player: unknown,
+		player: ClientPlayer,
 		partialTicks: number,
 		viewBobbing: boolean,
 	): void;
 	/** Port of setupCameraTransform: the view effects, then orientCamera. */
 	setupCamera(
-		player: unknown,
+		player: ClientPlayer,
 		partialTicks: number,
 		viewBobbing: boolean,
 	): { x: number; y: number; z: number; yaw: number; pitch: number };
@@ -149,10 +151,10 @@ export class WorldRenderer {
 		hit: { block: { blockX: number; blockY: number; blockZ: number } } | null,
 	): void;
 	/** Thrown potions and pearls, interpolated between ticks. */
-	renderProjectiles(entities: unknown[], partialTicks: number): void;
+	renderProjectiles(entities: Entity[], partialTicks: number): void;
 	initFire(): void;
 	updateFireTextures(): void;
-	renderDroppedItems(entities: unknown[], partialTicks: number): void;
+	renderDroppedItems(entities: Entity[], partialTicks: number): void;
 	spawnLightning(x: number, y: number, z: number): void;
 	updateLightning(): void;
 	/**
@@ -165,7 +167,7 @@ export class WorldRenderer {
 	 * same rectangle so it shows through.
 	 */
 	renderInventoryPreview(
-		player: unknown,
+		player: EntityPlayer,
 		rect: { x: number; y: number; width: number; height: number },
 		lookX: number,
 		lookY: number,

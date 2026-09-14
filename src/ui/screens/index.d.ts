@@ -1,3 +1,5 @@
+import type { ServerInfo } from "./servers.js";
+
 export const ScreenMethods: {
 	showLoading(): void;
 	setLoading(progress: number, label: string): void;
@@ -17,7 +19,7 @@ export const ScreenMethods: {
 	newSession(): import("../../net/session.js").Session;
 	createServer(): Promise<void>;
 	drawPrivateLabel(right: number, y: number): void;
-	joinServer(server: unknown, shareToken?: string): Promise<void>;
+	joinServer(server: ServerInfo | undefined, shareToken?: string): Promise<void>;
 	joinShareLink(): Promise<void>;
 	teardownSession(): void;
 	optionLabel(key: string, label: string): string;

@@ -1,7 +1,11 @@
-/** Collision boxes for a block at the given coordinates. */
-export function getCollisionBoxes(block: Block, x: number, y: number, z: number, out: AABB[]): void;
-/** Selection/ray trace box, used for block ray tracing. */
-export function getSelectionBox(block: Block, x: number, y: number, z: number): AABB | null;
+/**
+ * Block registry. Ids are local to this project but every property that affects
+ * gameplay (slipperiness, collision boxes, opacity) mirrors the 1.7.10 values.
+ *
+ * Face order used everywhere: 0 = down, 1 = up, 2 = north(-z), 3 = south(+z),
+ * 4 = west(-x), 5 = east(+x). This matches Minecraft's side indices.
+ */
+import { AABB } from "../core/aabb.js";
 export const SHAPE_EMPTY: 0;
 export const SHAPE_CUBE: 1;
 export const SHAPE_SLAB_BOTTOM: 2;
@@ -12,6 +16,25 @@ export const SHAPE_PANE: 6;
 export const SHAPE_LIQUID: 7;
 export const SHAPE_CROSS: 8;
 export const SHAPE_SNOW: 9;
+export interface Block {
+	id: number;
+	name: string;
+	shape: number;
+	solid: boolean;
+	opaque: boolean;
+	slipperiness: number;
+	lightOpacity: number;
+	lightValue: number;
+	material: string;
+	tint: number | null;
+	tex: string | null;
+	texTop: string | null;
+	texBottom: string | null;
+	overlaySide: string | null;
+	translucent: boolean;
+	glass: boolean;
+	height: number;
+}
 export const blocks: Block[];
 export const AIR: number;
 export const STONE: number;
@@ -75,24 +98,8 @@ export const LEAVES_SPRUCE: number;
 export const SPRUCE_FENCE: number;
 export const SNOW_LAYER_2: number;
 export const STAINED_CLAY_VARIANTS: number[];
-import { AABB } from "../core/aabb.js";
+/** Collision boxes for a block at the given coordinates. */
+export function getCollisionBoxes(block: Block, x: number, y: number, z: number, out: AABB[]): void;
+/** Selection/ray trace box, used for block ray tracing. */
+export function getSelectionBox(block: Block, x: number, y: number, z: number): AABB | null;
 export const FULL: AABB;
-export interface Block {
-	id: number;
-	name: string;
-	shape: number;
-	solid: boolean;
-	opaque: boolean;
-	slipperiness: number;
-	lightOpacity: number;
-	lightValue: number;
-	material: string;
-	tint: number | null;
-	tex: string | null;
-	texTop: string | null;
-	texBottom: string | null;
-	overlaySide: string | null;
-	translucent: boolean;
-	glass: boolean;
-	height: number;
-}

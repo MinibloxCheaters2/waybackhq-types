@@ -1,6 +1,24 @@
 import * as THREE from "three";
 import { Lightmap } from "./lightmap.js";
 
+/**
+ * ModelBiped rendered with three.js, kept in Minecraft model space.
+ *
+ * The scene graph mirrors what RendererLivingEntity does:
+ *   root      -> translate to entity position, rotate (180 - renderYawOffset)
+ *   flipNode  -> glScalef(-1, -1, 1)
+ *   offset    -> glTranslatef(0, -24 * 0.0625, 0)
+ *   parts     -> ModelRenderer nodes in model units (1 unit = 1/16 block)
+ *
+ * Because scale(-1,-1,1) has a positive determinant it is a pure rotation, so
+ * face winding is preserved and no material side flipping is needed. Box UVs
+ * follow ModelBox's quad layout exactly.
+ */
+export const MODEL_SCALE: 0.0625;
+/**
+ * Builds a box in model space. Vertices and per-face UV rectangles reproduce
+ * ModelBox's six TexturedQuads.
+ */
 export function buildModelBox(
 	offX: number,
 	offY: number,
@@ -14,19 +32,61 @@ export function buildModelBox(
 	texW?: number,
 	texH?: number,
 ): THREE.BufferGeometry;
+
+/** A ModelRenderer node: pivot plus one box, rotated Z then Y then X. */
+declare class ModelPart {
+	object: THREE.Object3D;
+	mesh: THREE.Mesh;
+	defaultPoint: { x: number; y: number; z: number };
+	glints: THREE.Object3D[] | undefined;
+	constructor(
+		material: THREE.Material,
+		box: {
+			x: number;
+			y: number;
+			z: number;
+			w: number;
+			h: number;
+			d: number;
+			u: number;
+			v: number;
+			expand?: number;
+		},
+		texW: number,
+		texH: number,
+	);
+	setRotationPoint(x: number, y: number, z: number): void;
+	setAngles(x: number, y: number, z: number): void;
+	addGlint(): void;
+}
+
+/**
+ * The right arm on its own, as RenderPlayer.renderFirstPersonArm draws it.
+ *
+ * That method calls setRotationAngles with every argument zero and onGround
+ * zero beforehand, so bipedRightArm keeps its rest pose and only the pivot
+ * matters. No armour layer is drawn and none of the flips RendererLivingEntity
+ * applies are in scope here, because the caller in ItemRenderer orients the arm
+ * itself.
+ */
 export function buildFirstPersonArm(
 	lightmap: Lightmap | null,
 	skinTexture?: THREE.Texture,
 ): { object: THREE.Object3D; material: THREE.MeshBasicMaterial };
 
 export class PlayerModel {
-	constructor();
+	lightmap: Lightmap | null;
+	root: THREE.Group;
+	flipNode: THREE.Object3D;
+	offsetNode: THREE.Object3D;
 	material: THREE.MeshBasicMaterial;
 	overlayMaterial: THREE.MeshBasicMaterial;
 	armorMaterial1: THREE.MeshBasicMaterial;
 	armorMaterial2: THREE.MeshBasicMaterial;
 	allMaterials: THREE.MeshBasicMaterial[];
 	parts: Record<string, ModelPart>;
+	itemAttachment: THREE.Object3D;
+	baseColor: THREE.Color;
 	armor: {
 		helmet: ModelPart;
 		chest: ModelPart;
@@ -38,54 +98,38 @@ export class PlayerModel {
 		rightBoot: ModelPart;
 		leftBoot: ModelPart;
 	};
+	/**
+	 * @param {Lightmap} [lightmap] omitted for the inventory preview, which
+	 * GuiInventory draws under its own lighting rather than the world's.
+	 */
+	constructor(lightmap?: Lightmap | null);
+	/** Diamond armour: layer 1 for helmet, chest and boots; layer 2 for legs. */
+	buildArmor(): void;
 	setSkin(texture: THREE.Texture): void;
 	setGhost(ghost: boolean): void;
 	setArmorVisible(helmet: boolean, chest: boolean, legs: boolean, boots: boolean): void;
-	setLight(coord: THREE.Vector2, brightness: number, hurt: boolean): void;
-}
-
-export class ModelPart {
-	constructor(
-		parent: THREE.Object3D,
-		name: string,
-		sizeX: number,
-		sizeY: number,
-		sizeZ: number,
-		texOffU: number,
-		texOffV: number,
-		scale?: number,
-	);
-	offset: THREE.Group;
-	box: THREE.Object3D;
-	boxPivot: THREE.Group;
-	overlay: THREE.Object3D;
-	overlayPivot: THREE.Group;
-	overlayMaterial: THREE.MeshBasicMaterial | null;
-	mirrorUV: number;
-	mirrorFlip(u: boolean, v: boolean): void;
-	sizeX: number;
-	sizeY: number;
-	sizeZ: number;
-	texOffU: number;
-	texOffV: number;
-	origin: THREE.Vector3;
-	rotateAngleX: number;
-	rotateAngleY: number;
-	rotateAngleZ: number;
-	zIndex: number;
-	visible: boolean;
-	displayThetaX: number;
-	displayThetaY: number;
-	displayThetaZ: number;
-	displayOffsetX: number;
-	displayOffsetY: number;
-	displayOffsetZ: number;
-	tick(partialTicks: number): void;
+	/** Port of ModelBiped.setRotationAngles. */
+	setRotationAngles(
+		limbSwing: number,
+		limbSwingAmount: number,
+		ageInTicks: number,
+		netHeadYaw: number,
+		headPitch: number,
+		swingProgress: number,
+		heldItemRight: number,
+		isSneak: boolean,
+	): void;
 	/**
-	 * Port of ModelBox.render with display transforms stripped out.
+	 * Applies the light level tint and the hurt overlay. The overlay is the
+	 * 40% (brightness, 0, 0) pass vanilla blends over the model while
+	 * hurtTime or deathTime is running.
+	 *
+	 * The lightmap now supplies the shading, so the base colour stays white and
+	 * only the hurt flash uses the scalar, which is what RendererLivingEntity
+	 * passes to glColor4f alongside its own lightmap coordinate.
 	 */
-	render(ctx: THREE.Matrix4, scale: number): void;
-	showBox(show: boolean): void;
-	setShowModel(showModel: boolean): void;
-	setLight(coord: THREE.Vector2, scale: number, uv: THREE.Vector2): void;
+	setLight(coord: THREE.Vector2, brightness: number, hurt: boolean): void;
+	/** Animates the armour glint with the entity age in ticks. */
+	updateGlint(ageTicks: number): void;
+	dispose(): void;
 }

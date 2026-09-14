@@ -3,6 +3,7 @@ import { KnockbackScreen } from "./knockback.js";
 import { Session } from "../net/session.js";
 import { Game } from "../game/index.js";
 import { DeathScreen } from "../client/deathscreen.js";
+import type { ServerInfo } from "./screens/servers.js";
 
 interface ButtonDef {
 	id: string;
@@ -13,20 +14,6 @@ interface ButtonDef {
 	h: number;
 	action: () => void;
 	enabled: boolean;
-}
-
-interface ServerInfo {
-	id: string | number;
-	name: string;
-	label: string;
-	arenaName: string;
-	kind: string;
-	players: number;
-	maxPlayers: number;
-	ping: number;
-	private: boolean;
-	duels: number;
-	playerNames: string[];
 }
 
 export class MinecraftUI {
@@ -156,10 +143,10 @@ export class MinecraftUI {
 	isPingHover(x: number, y: number): boolean;
 	drawServerTooltip(lines: string[]): void;
 	drawPingBars(x: number, y: number, ping: number): void;
-	newSession(): import("../net/session.js").Session;
+	newSession(): Session;
 	createServer(): Promise<void>;
 	drawPrivateLabel(right: number, y: number): void;
-	joinServer(server: unknown, shareToken?: string): Promise<void>;
+	joinServer(server: ServerInfo | undefined, shareToken?: string): Promise<void>;
 	joinShareLink(): Promise<void>;
 	teardownSession(): void;
 	optionLabel(key: string, label: string): string;

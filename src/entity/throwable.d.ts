@@ -1,7 +1,18 @@
 import { Entity } from "./entity.js";
 import { Vec3 } from "../core/aabb.js";
 import { PotionDef } from "./potion.js";
+/**
+ * Ports of EntityThrowable, EntityPotion and EntityEnderPearl.
+ *
+ * In vanilla the player's posY is eye level (yOffset 1.62) and getEyeHeight
+ * returns 0.12, so a throwable spawns at eye + 0.12 - 0.10. This project keeps
+ * posY at the feet, so the same point is posY + 1.62 + 0.02.
+ */
 export interface MovingObjectPosition {
+	blockX?: number;
+	blockY?: number;
+	blockZ?: number;
+	sideHit?: number;
 	entityHit?: Entity;
 	hitVec?: Vec3;
 }

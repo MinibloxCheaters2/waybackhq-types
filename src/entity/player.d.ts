@@ -1,9 +1,8 @@
+import { Entity, DamageSourceType } from "./entity.js";
 import { EntityLivingBase } from "./entityliving.js";
-import { DamageSourceType } from "./entity.js";
 import { FoodStats } from "./foodstats.js";
 import { EntityItem } from "./item.js";
 import { ItemStack } from "../item/items.js";
-import { KnockbackConfig } from "../core/knockback.js";
 export class InventoryPlayer {
 	mainInventory: (ItemStack | null)[];
 	armorInventory: (ItemStack | null)[];
@@ -18,8 +17,8 @@ export class InventoryPlayer {
 	clear(): void;
 	consumeCurrentItem(): void;
 	/** Finds the first slot holding an item with the given name/potion type. */
-	findSlot(name: string, potionType?: number): number;
-	countItem(name: string, potionType?: number): number;
+	findSlot(name: string, potionType?: string): number;
+	countItem(name: string, potionType?: string): number;
 	addItemStackToInventory(stack: ItemStack): boolean;
 	/**
 	 * Pulls the first matching stack out of the main inventory into the hotbar
@@ -80,6 +79,7 @@ export class EntityPlayer extends EntityLivingBase {
 	getFoodStats(): FoodStats;
 	/** Port of EntityPlayer.addMovementStat, the source of walk exhaustion. */
 	addMovementStat(dx: number, dy: number, dz: number): void;
+	fall(): void;
 	/** Port of EntityLivingBase.fall / EntityPlayer.fall. */
 	fall(distance: number): void;
 	playSoundEvent(): void;
@@ -92,23 +92,15 @@ export class EntityPlayer extends EntityLivingBase {
 	 * Port of EntityPlayer.attackTargetEntityWithCurrentItem.
 	 */
 	attackTargetEntityWithCurrentItem(target: Entity): boolean;
-	onCriticalHit(target: Entity): void;
-	onEnchantmentCritical(target: Entity): void;
-	onAttackLanded(target: Entity, critical: boolean): void;
+	onCriticalHit(): void;
+	onEnchantmentCritical(): void;
+	onAttackLanded(): void;
 	setLastAttacker(entity: Entity): void;
-	updateItemUse(stack: ItemStack, count: number): void;
+	updateItemUse(): void;
 	/** Port of EntityPlayer.onItemUseFinish. */
 	onItemUseFinish(): void;
 	/** Applies one effect entry from a drunk potion at full strength. */
-	applyPotionFromItem(
-		effect: {
-			id: number;
-			duration: number;
-			amplifier: number;
-		},
-		strength?: number,
-		potionDef?: unknown,
-	): void;
-	onConsumeItem(stack: ItemStack, action: string): void;
+	applyPotionFromItem(effect: { id: number; duration: number; amplifier: number }): void;
+	onConsumeItem(): void;
 }
 import { World } from "../world/world.js";

@@ -1,15 +1,13 @@
 import { MinecraftSlider } from "./widgets/slider.js";
+import type { KnockbackConfig } from "../core/knockback.js";
 
 export class KnockbackScreen {
 	constructor(ui: import("./minecraft.js").MinecraftUI, game: import("../game/index.js").Game);
 	ui: import("./minecraft.js").MinecraftUI;
 	game: import("../game/index.js").Game;
-	values: {
-		horizontal: number;
-		vertical: number;
-	};
+	values: KnockbackConfig;
 	sliders: MinecraftSlider[];
-	open(values: Partial<{ horizontal: number; vertical: number }>): void;
+	open(values?: Partial<KnockbackConfig>): void;
 	draw(): void;
 	layout(): {
 		x: number;

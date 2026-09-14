@@ -1,4 +1,14 @@
 /**
+ * Fixed size voxel world used for duel arenas.
+ *
+ * Arenas are small and static, so the world is a flat typed array rather than
+ * a chunk system. Collision, ray tracing and light propagation follow the
+ * 1.7.10 implementations.
+ */
+import { AABB, Vec3 } from "../core/aabb.js";
+import { Entity } from "../entity/entity.js";
+import { Block } from "./blocks.js";
+/**
  * WorldProvider.generateLightBrightnessTable with the overworld's zero ambient,
  * which reduces to f / (4 - 3f).
  */
@@ -79,8 +89,4 @@ export class World {
 	spawnEntity(entity: Entity): Entity;
 	removeDeadEntities(): void;
 }
-import { Vec3 } from "../core/aabb.js";
-import { AABB } from "../core/aabb.js";
-import { Entity } from "../entity/entity.js";
-import { Block } from "./blocks.js";
 export { Vec3, AABB };

@@ -29,6 +29,7 @@ export class Input {
 	setBindings(bindings: Record<string, string>): void;
 	setRightSource(source: string, down: boolean): void;
 	releaseRight(): void;
+	bindEvents(): void;
 	clear(): void;
 	isDown(bind: string): boolean;
 	consumeLook(): { yaw: number; pitch: number };
@@ -42,4 +43,3 @@ export class Input {
 }
 export const DEFAULT_BINDS: Record<string, string>;
 export const CONTROL_DEFS: { id: string; label: string; category: string }[];
-export const SENSITIVITY_SCALE = 0.0025;

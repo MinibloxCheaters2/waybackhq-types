@@ -1,9 +1,10 @@
-import type { ItemStack } from "./items.js";
+import type { PotionDef } from "../entity/potion.js";
+export type UseAction = 0 | 1 | 2 | 3 | 4;
 export interface ItemOptions {
 	maxStackSize?: number;
 	maxDamage?: number;
 	texture?: string;
-	useAction?: number;
+	useAction?: UseAction;
 	useDuration?: number;
 	attackDamage?: number;
 	armorPoints?: number;
@@ -11,7 +12,6 @@ export interface ItemOptions {
 	full3D?: boolean;
 	displayName?: string;
 }
-export function registerItem(name: string, options?: ItemOptions): Item;
 export const ACTION_NONE: 0;
 export const ACTION_EAT: 1;
 export const ACTION_DRINK: 2;
@@ -24,7 +24,7 @@ export class Item {
 	maxStackSize: number;
 	maxDamage: number;
 	texture: string;
-	useAction: number;
+	useAction: UseAction;
 	useDuration: number;
 	attackDamage: number;
 	armorPoints: number;
@@ -32,6 +32,8 @@ export class Item {
 	full3D: boolean;
 	displayName: string;
 }
+export function registerItem(name: string, options?: ItemOptions): Item;
+/** Hunger and saturation restored by each food item. */
 export const FOOD_VALUES: {
 	golden_carrot: {
 		hunger: number;
@@ -57,16 +59,8 @@ export class ItemStack {
 	getEnchantment(id: string): number;
 	hasEffect(): boolean;
 	isSplash(): boolean;
-	getPotionDef(): {
-		effects: {
-			id: number;
-			duration: number;
-			amplifier: number;
-		}[];
-		splash: boolean;
-		color: number;
-	} | null;
-	getUseAction(): number;
+	getPotionDef(): PotionDef | null;
+	getUseAction(): UseAction;
 	getMaxItemUseDuration(): number;
 	getDisplayName(): string;
 }

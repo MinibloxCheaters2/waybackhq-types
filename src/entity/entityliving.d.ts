@@ -1,4 +1,4 @@
-import { Entity, DamageSourceType, DamageSource } from "./entity.js";
+import { Entity, DamageSourceType } from "./entity.js";
 import { AttributeInstance } from "./attributes.js";
 import { PotionEffect } from "./potion.js";
 export class EntityLivingBase extends Entity {

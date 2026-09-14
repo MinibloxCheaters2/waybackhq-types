@@ -1,6 +1,14 @@
+/**
+ * No-debuff bot.
+ *
+ * Uses the same player class and physics as a human, so it is bound by the
+ * same movement, reach and item rules. Behavior models what a competent
+ * player does: strafe around the target, w-tap after landing a hit, throw
+ * healing potions at its own feet when low, and pearl away when in trouble.
+ */
 import { ClientPlayer } from "../client/clientplayer.js";
-import { ItemStack } from "../item/items.js";
 import { EntityPlayer } from "../entity/player.js";
+import { ItemStack } from "../item/items.js";
 
 export class BotPlayer extends ClientPlayer {
 	constructor(world: unknown, name: string, options?: { difficulty?: number });
@@ -17,6 +25,8 @@ export class BotPlayer extends ClientPlayer {
 	reactionDelay: number;
 	usingItemTicks: number;
 	desiredSlot: number;
+	/** Bot decision making runs in place of reading the keyboard. */
+	onLivingUpdate(): void;
 	think(): void;
 	/** Smooth aim with a small amount of jitter scaled by difficulty. */
 	updateAim(dx: number, dy: number, dz: number, distance: number): void;

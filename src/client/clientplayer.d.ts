@@ -1,6 +1,7 @@
 import { EntityPlayer } from "../entity/player.js";
 import { ParticleSystem } from "./particles.js";
 import { ItemStack } from "../item/items.js";
+import type { World } from "../world/world.js";
 
 export class MovementInput {
 	moveStrafe: number;
@@ -18,7 +19,7 @@ export class MovementInput {
 	}): void;
 }
 export class ClientPlayer extends EntityPlayer {
-	constructor(world: unknown, name: string, options?: { local?: boolean });
+	constructor(world: World, name: string, options?: { local?: boolean });
 	movementInput: MovementInput;
 	sprintToggleTimer: number;
 	sprintingTicksLeft: number;
@@ -27,7 +28,7 @@ export class ClientPlayer extends EntityPlayer {
 	stopSprintingTimer: number;
 	isLocal: boolean;
 	particles: ParticleSystem | null;
-	game: unknown;
+	game: import("../game/game.js").Game | null;
 	rawInput: {
 		forward: boolean;
 		back: boolean;
@@ -37,12 +38,22 @@ export class ClientPlayer extends EntityPlayer {
 		sneak: boolean;
 	};
 	netReplaying: boolean;
+	setSprinting(value: boolean): void;
 	tickSprintKnockback(): void;
+	isSneaking(): boolean;
+	updateEntityActionState(): void;
+	/**
+	 * Port of EntityPlayerSP.onLivingUpdate: sprint start/stop rules including
+	 * the double-tap window and the item-use slowdown.
+	 */
+	onLivingUpdate(): void;
 	playSoundEvent(kind: string): void;
 	playHurtOrDeathSound(isDeath: boolean): void;
 	playSoundAt(name: string, volume: number, pitch: number): void;
-	onCriticalHit(target: unknown): void;
-	onEnchantmentCritical(target: unknown): void;
+	playStepSound(): void;
+	onCriticalHit(target: import("../entity/entity.js").Entity): void;
+	onEnchantmentCritical(target: import("../entity/entity.js").Entity): void;
 	onConsumeItem(stack: ItemStack, kind: string): void;
 	updateItemUse(stack: ItemStack, count: number): void;
+	onEntityUpdate(): void;
 }
