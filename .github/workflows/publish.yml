@@ -30,4 +30,4 @@ jobs:
         run: bun install
 
       - name: Publish (NPM)
-        run: bunx npm stage publish --registry=https://registry.npmjs.org/ --loglevel info
+        run: bunx npm publish --registry=https://registry.npmjs.org/ --loglevel info
