@@ -1,8 +1,9 @@
 {
 	"name": "@wq2/waybackhq-types",
-	"version": "0.0.0",
+	"version": "0.0.1",
 	"description": "Typings for WaybackHQ",
 	"license": "AGPL-3.0-only",
+	"types": "src/main.d.ts",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/MinibloxCheaters2/waybackhq-types.git"
