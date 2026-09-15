@@ -31,6 +31,7 @@
 	"devDependencies": {
 		"oxfmt": "~0.63.0",
 		"oxlint": "~1.78.0",
+		"tsdown": "^0.23.0",
 		"typescript": "^7.0.2"
 	},
 	"packageManager": "bun@1.4.0",
