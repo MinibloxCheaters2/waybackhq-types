@@ -18,12 +18,9 @@
 		"access": "public"
 	},
 	"scripts": {
-		"build": "tsdown",
-		"dev": "tsdown -w",
 		"lint": "oxlint src",
 		"lint:fix": "oxlint src --fix",
-		"fmt": "oxfmt src",
-		"prepublishOnly": "bun run build"
+		"fmt": "oxfmt src"
 	},
 	"dependencies": {
 		"@types/three": "0.160.0"
@@ -31,7 +28,6 @@
 	"devDependencies": {
 		"oxfmt": "~0.63.0",
 		"oxlint": "~1.78.0",
-		"tsdown": "^0.23.0",
 		"typescript": "^7.0.2"
 	},
 	"packageManager": "bun@1.4.0",
